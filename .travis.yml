@@ -3,6 +3,19 @@ language: julia
 os:
   - linux
   - osx
+services:
+  - postgresql
+env:
+  - POSTGRESQL_VERSION=9.4 PGHOST="/var/run/postgresql"
+  - POSTGRESQL_VERSION=9.6 PGHOST="/var/run/postgresql"
+before_install:
+  - if [[ "$TRAVIS_OS_NAME" == linux ]]; then sudo service postgresql stop && sudo service postgresql start $POSTGRESQL_VERSION            ; fi
+  - if [[ "$TRAVIS_OS_NAME" == osx   ]]; then rm -rf /usr/local/var/postgres                                                               ; fi
+  - if [[ "$TRAVIS_OS_NAME" == osx   ]]; then initdb /usr/local/var/postgres                                                               ; fi
+  - if [[ "$TRAVIS_OS_NAME" == osx   ]]; then pg_ctl -D /usr/local/var/postgres start                                                      ; fi
+  - if [[ "$TRAVIS_OS_NAME" == osx   ]]; then until createuser -s postgres; do echo "Postgres is unavailable - sleeping"; sleep 0.05; done ; fi
+  - psql -U postgres -tc 'SHOW server_version'
+  - psql -U postgres -c '\conninfo'
 julia:
   - 0.6
   - 0.7
