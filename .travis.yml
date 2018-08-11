@@ -4,12 +4,10 @@ os:
   - linux
   - osx
 julia:
-#  - 0.6
+  - 0.6
   - 0.7
   - 1.0
 #  - nightly
-env:
-  - JULIA_PROJECT="@."
 matrix:
   allow_failures:
     - julia: nightly
