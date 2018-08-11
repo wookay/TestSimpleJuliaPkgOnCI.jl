@@ -22,6 +22,8 @@ script:
     julia -e '
       VERSION >= v"0.7.0-DEV.3656" && using Pkg
       if VERSION >= v"0.7.0-DEV.5183"
+          pkg"activate ."
+          pkg"instantiate"
           Pkg.build("TestSimpleJuliaPkgOnCI"); Pkg.test("TestSimpleJuliaPkgOnCI", coverage=true)
       else
           Pkg.clone(pwd()); Pkg.build("TestSimpleJuliaPkgOnCI"); Pkg.test("TestSimpleJuliaPkgOnCI"; coverage=true)
